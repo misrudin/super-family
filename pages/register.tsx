@@ -1,11 +1,11 @@
 import { PublicLayout } from '@/components/layouts/PublicLayout';
-import { Landing } from '@/containers/Landing';
+import Register from '@/containers/Register';
 import type { NextPage, NextPageContext } from 'next';
 
-const LandingPage: NextPage = () => {
+const RegisterPage: NextPage = () => {
   return (
     <PublicLayout>
-      <Landing />
+      <Register />
     </PublicLayout>
   )
 }
@@ -13,8 +13,8 @@ const LandingPage: NextPage = () => {
 export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {
-      title: 'Home',
+      title: 'Daftar Super Family',
     },
   };
 }
-export default LandingPage
+export default RegisterPage

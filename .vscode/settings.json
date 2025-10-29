@@ -1,0 +1,34 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.removeUnusedImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.preferences.organizeImportsCollation": "ordinal",
+  "typescript.preferences.organizeImportsIgnoreCase": "auto",
+  "typescript.preferences.organizeImportsNumericCollation": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.format.enable": true,
+  "files.associations": {
+    "*.tsx": "typescriptreact",
+    "*.ts": "typescript"
+  },
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "typescript.suggest.includeCompletionsForModuleExports": true,
+  "typescript.suggest.includeCompletionsWithSnippetText": true
+}
