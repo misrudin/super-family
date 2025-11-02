@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/utils/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Routes yang memerlukan autentikasi
 const protectedRoutes = [
-    '/dashboard',
+    // '/dashboard',
     '/profile',
     '/family',
     '/transactions',

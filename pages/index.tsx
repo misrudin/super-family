@@ -1,13 +1,8 @@
-import { PublicLayout } from '@/components/layouts/PublicLayout';
 import { Landing } from '@/containers/Landing';
 import type { NextPage, NextPageContext } from 'next';
 
 const LandingPage: NextPage = () => {
-  return (
-    <PublicLayout>
-      <Landing />
-    </PublicLayout>
-  )
+  return <Landing />
 }
 
 export async function getServerSideProps(context: NextPageContext) {

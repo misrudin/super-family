@@ -1,8 +1,12 @@
+import { PublicLayout } from '@/components/layouts/PublicLayout';
+import Login from '@/containers/Login';
 import type { NextPage, NextPageContext } from 'next';
 
 const LoginPage: NextPage = () => {
   return (
-      <div>heloo</div>
+    <PublicLayout isShowFooter={false}>
+      <Login />
+    </PublicLayout>
   )
 }
 

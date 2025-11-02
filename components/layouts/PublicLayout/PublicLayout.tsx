@@ -4,9 +4,11 @@ import { Footer, Header } from './Partials';
 
 interface PublicLayoutProps {
     children: React.ReactNode;
+    isShowHeader?: boolean;
+    isShowFooter?: boolean;
 }
 
-export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
+export const PublicLayout: React.FC<PublicLayoutProps> = ({ children, isShowHeader = true, isShowFooter = true }) => {
     return (
         <Box
             as="main"
@@ -14,11 +16,11 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
             bg="gray.100"
         >
             <Box maxW='lg' bg='white' shadow='xs' minH='100vh' mx='auto'>
-                <Header title="Super Family" subtitle="Kelola keuangan keluarga dengan mudah" />
+                {isShowHeader && <Header />}
                 <Box>
                     {children}
                 </Box>
-                <Footer showLinks />
+                {isShowFooter && <Footer showLinks />}
             </Box>
         </Box>
     );

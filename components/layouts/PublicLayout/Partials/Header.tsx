@@ -1,7 +1,9 @@
-import { ColorModeButton } from "@/components/ui/color-mode";
-import { Box, HStack, Image } from "@chakra-ui/react";
+import { Box, HStack, IconButton, Image } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { FiChevronLeft } from "react-icons/fi";
 
 export const Header = () => {
+  const router = useRouter();
   return (
     <Box
       bg='cardBg'
@@ -14,10 +16,13 @@ export const Header = () => {
       h='60px'
     >
       <HStack h='full' align='center' justify='space-between'>
+        <Box flex='0.5'>
+          <IconButton onClick={router.back} aria-label="Back" variant='subtle'>
+            <FiChevronLeft />
+          </IconButton>
+        </Box>
         <Image src='/next.svg' alt='Super Family' width={100} objectFit='contain' />
-        <HStack>
-          <ColorModeButton />
-        </HStack>
+        <Box flex='0.5' />
       </HStack>
     </Box>
   )

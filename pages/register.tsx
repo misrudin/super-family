@@ -4,7 +4,7 @@ import type { NextPage, NextPageContext } from 'next';
 
 const RegisterPage: NextPage = () => {
   return (
-    <PublicLayout>
+    <PublicLayout isShowFooter={false}>
       <Register />
     </PublicLayout>
   )
