@@ -7,7 +7,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ showLinks = true }) => {
   return (
-    <Box mt={8} pt={6} borderTopWidth="1px" borderColor="gray.200">
+    <Box py={6} borderTopWidth="1px" borderColor="gray.200">
       <Text
         textAlign="center"
         color="gray.500"

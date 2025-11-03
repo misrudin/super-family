@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, ButtonGroup, defineStyle, EmptyState, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { JSX, memo } from 'react';
-import { FiArrowDown } from 'react-icons/fi';
+import { FiArrowDown, FiArrowUp } from 'react-icons/fi';
 import { HiColorSwatch } from 'react-icons/hi';
 
 const ringCss = defineStyle({
@@ -37,8 +37,7 @@ const Wrapper: React.FC = (): JSX.Element => {
                     </Avatar.Root>
                 </HStack>
             </Box>
-            <Box px='4' borderTopWidth='1px' mt='2' pt='2'>
-                <Text fontWeight='semibold'>Riwayat Transaksi</Text>
+            <Box px='4' mt='3'>
                 <EmptyState.Root>
                     <EmptyState.Content>
                         <EmptyState.Indicator>
@@ -55,12 +54,12 @@ const Wrapper: React.FC = (): JSX.Element => {
                         </ButtonGroup>
                     </EmptyState.Content>
                 </EmptyState.Root>
-                <VStack gap="4" mt="4">
+                <VStack gap="4">
                     <HStack gap='1' align='start' w="full" p="3" rounded="md" borderWidth='1px' borderColor='border'>
                         <Flex boxSize='30px' borderWidth='1px'
                             borderColor='border'
                             rounded='full' align='center'
-                            justify='center' mr='2' color='gray.500'>
+                            justify='center' mr='2' color='red.500'>
                             <FiArrowDown />
                         </Flex>
                         <Box flex='1'>
@@ -77,8 +76,8 @@ const Wrapper: React.FC = (): JSX.Element => {
                         <Flex boxSize='30px' borderWidth='1px'
                             borderColor='border'
                             rounded='full' align='center'
-                            justify='center' mr='2' color='gray.500'>
-                            <FiArrowDown />
+                            justify='center' mr='2' color='green'>
+                            <FiArrowUp />
                         </Flex>
                         <Box flex='1'>
                             <HStack justify='space-between' align='center'>

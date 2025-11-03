@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Routes yang memerlukan autentikasi
 const protectedRoutes = [
     // '/dashboard',
-    '/profile',
+    // '/profile',
     '/family',
     '/transactions',
     '/categories',

@@ -100,6 +100,7 @@ const config = defineConfig({
         dropdown: { value: '{shadows.lg}' },
         glow: { value: '{shadows.glow}' },
         glowHover: { value: '{shadows.glow-lg}' },
+        floating: { value: '{shadows.2xl}' },
       },
     },
   },

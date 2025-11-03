@@ -19,8 +19,16 @@ export const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children, isSh
                 <Box>
                     {children}
                 </Box>
-                <IconButton aria-label="Tambah Transaksi" size='xl' rounded="full" colorPalette='orange' shadow='3xl'
-                    pos='fixed' bottom={6} right={6} zIndex={1000}
+                <IconButton
+                    aria-label="Tambah Transaksi"
+                    size='xl'
+                    rounded="full"
+                    colorPalette='orange'
+                    shadow='0 0 30px rgb(249 115 22 / 0.4)'
+                    pos='fixed'
+                    bottom={6}
+                    right={6}
+                    zIndex={1000}
                 >
                     <FiPlus />
                 </IconButton>

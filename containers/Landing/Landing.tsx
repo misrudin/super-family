@@ -2,18 +2,17 @@ import {
     Box,
     Button,
     Container,
-    Flex,
-    HStack,
     Heading,
     Icon,
     SimpleGrid,
     Text,
-    VStack,
+    Timeline,
+    VStack
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
 import {
-    FiCheckCircle,
+    FiArrowRight,
     FiDollarSign,
     FiFileText,
     FiHeart,
@@ -27,150 +26,46 @@ import {
 export const Landing: React.FC = () => {
     return (
         <Box bg="bg" minH="100vh">
-            {/* Navbar */}
-            <Box
-                as="nav"
-                bg="cardBg"
-                borderBottomWidth="1px"
-                borderColor="border"
-                position="sticky"
-                top={0}
-                zIndex={1000}
-                shadow="sm"
-            >
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
-                    <Flex
-                        h="70px"
-                        align="center"
-                        justify="space-between"
-                        gap={4}
-                    >
-                        <Heading size="lg" color="primary">
-                            Super Family
-                        </Heading>
-
-                        <HStack
-                            display={{ base: 'none', md: 'flex' }}
-                            gap={6}
-                        >
-                            <Text
-                                as="a"
-                                color="subtext"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                                fontWeight="medium"
-                            >
-                                Features
-                            </Text>
-                            <Text
-                                as="a"
-                                color="subtext"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                                fontWeight="medium"
-                            >
-                                How it Works
-                            </Text>
-                            <Text
-                                as="a"
-                                color="subtext"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                                fontWeight="medium"
-                            >
-                                Testimonials
-                            </Text>
-                        </HStack>
-
-                        <Link href="/register">
-                            <Button colorPalette="blue" size="md">
-                                Coba Gratis
-                            </Button>
-                        </Link>
-                    </Flex>
-                </Container>
-            </Box>
-
             {/* Hero Section */}
-            <Box py={{ base: 12, md: 20 }} bg="cardBg">
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
-                    <Flex
-                        direction={{ base: 'column', lg: 'row' }}
-                        align="center"
-                        gap={12}
-                    >
-                        <VStack
-                            flex={1}
-                            align={{ base: 'center', lg: 'flex-start' }}
-                            gap={6}
-                            textAlign={{ base: 'center', lg: 'left' }}
+            <Box px='4' py='8' bg="cardBg">
+                <VStack
+                    flex={1}
+                    align='stretch'
+                    gap={6}
+                    textAlign={{ base: 'center' }}
+                >
+                    <Box>
+                        <Heading
+                            size="2xl"
+                            color="text"
+                            mb={4}
+                            lineHeight="1.2"
                         >
-                            <Box>
-                                <Heading
-                                    size="2xl"
-                                    color="text"
-                                    mb={4}
-                                    lineHeight="1.2"
-                                >
-                                    Atur Keuangan Keluarga Dengan Lebih Mudah
-                                </Heading>
-                                <Text
-                                    fontSize={{ base: 'lg', md: 'xl' }}
-                                    color="subtext"
-                                    maxW="600px"
-                                >
-                                    Pantau pemasukan & pengeluaran keluarga
-                                    secara bersama-sama dalam satu aplikasi.
-                                    Gratis tanpa batas fitur.
-                                </Text>
-                            </Box>
-
-                            <HStack
-                                gap={4}
-                                flexWrap="wrap"
-                                justify={{ base: 'center', lg: 'flex-start' }}
-                            >
-                                <Link href="/register">
-                                    <Button
-                                        colorPalette="blue"
-                                        size="lg"
-                                    >
-                                        Coba Sekarang (Gratis)
-                                    </Button>
-                                </Link>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    colorPalette="blue"
-                                >
-                                    Lihat Demo
-                                </Button>
-                            </HStack>
-                        </VStack>
-
-                        <Box
-                            flex={1}
-                            maxW={{ base: '100%', lg: '500px' }}
-                            w="full"
+                            Atur Keuangan Keluarga Dengan Lebih Mudah
+                        </Heading>
+                        <Text
+                            fontSize='md'
+                            color="subtext"
+                            maxW="600px"
                         >
-                            <Box
-                                bgGradient="linear(to-br, brand.50, brand.100)"
-                                borderRadius="2xl"
-                                p={8}
-                                position="relative"
-                                overflow="hidden"
-                            >
-                                <Box
-                                    as="img"
-                                    w="100%"
-                                    h="auto"
-                                    borderRadius="lg"
-                                    objectFit="cover"
-                                />
-                            </Box>
-                        </Box>
-                    </Flex>
-                </Container>
+                            Pantau pemasukan & pengeluaran keluarga
+                            secara bersama-sama dalam satu aplikasi.
+                            Gratis tanpa batas fitur.
+                        </Text>
+                    </Box>
+
+                    <Link href="/register">
+                        <Button
+                            colorPalette="orange"
+                            size="xl"
+                            w='full'
+                            rounded='xl'
+                        >
+                            Gunakan Sekarang (Gratis)
+                            <FiArrowRight />
+                        </Button>
+                    </Link>
+                </VStack>
             </Box>
 
             {/* Features Section */}
@@ -188,7 +83,7 @@ export const Landing: React.FC = () => {
                         </Box>
 
                         <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 4 }}
+                            columns={1}
                             gap={6}
                             w="full"
                         >
@@ -308,7 +203,7 @@ export const Landing: React.FC = () => {
 
             {/* How It Works Section */}
             <Box py={16} id="how-it-works" bg="cardBg">
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
+                <Container maxW="container.xl" px={{ base: 4 }}>
                     <VStack gap={12} align="center">
                         <Box textAlign="center" maxW="2xl">
                             <Heading size="xl" color="text" mb={4}>
@@ -320,88 +215,59 @@ export const Landing: React.FC = () => {
                             </Text>
                         </Box>
 
-                        <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 4 }}
-                            gap={8}
-                            w="full"
-                        >
-                            {[
-                                {
-                                    step: '1',
-                                    icon: FiHome,
-                                    title: 'Buat Keluarga',
-                                    description:
-                                        'Daftar dan buat akun keluarga Anda dengan mudah dan gratis',
-                                },
-                                {
-                                    step: '2',
-                                    icon: FiUsers,
-                                    title: 'Tambah Anggota',
-                                    description:
-                                        'Undang anggota keluarga untuk bergabung dan mengelola keuangan bersama',
-                                },
-                                {
-                                    step: '3',
-                                    icon: FiFileText,
-                                    title: 'Catat Keuangan',
-                                    description:
-                                        'Mulai mencatat pemasukan dan pengeluaran keluarga setiap hari',
-                                },
-                                {
-                                    step: '4',
-                                    icon: FiTrendingUp,
-                                    title: 'Pantau Bersama',
-                                    description:
-                                        'Lihat dashboard dan laporan keuangan untuk membuat keputusan yang lebih baik',
-                                },
-                            ].map((item, index) => (
-                                <VStack
-                                    key={index}
-                                    gap={4}
-                                    align="center"
-                                    textAlign="center"
-                                    position="relative"
-                                >
-                                    <Box
-                                        bg="brand.500"
-                                        color="white"
-                                        borderRadius="full"
-                                        w={16}
-                                        h={16}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        fontSize="xl"
-                                        fontWeight="bold"
-                                        mb={2}
-                                    >
-                                        {item.step}
-                                    </Box>
-                                    <Box
-                                        bg="brand.50"
-                                        p={4}
-                                        borderRadius="lg"
-                                        color="brand.600"
-                                        mb={2}
-                                    >
-                                        <Icon as={item.icon} boxSize={6} />
-                                    </Box>
-                                    <Heading size="md" color="text">
-                                        {item.title}
-                                    </Heading>
-                                    <Text color="subtext">
-                                        {item.description}
-                                    </Text>
-                                </VStack>
-                            ))}
-                        </SimpleGrid>
+                        <Timeline.Root size='xl'>
+                            {
+                                [
+                                    {
+                                        step: '1',
+                                        icon: FiHome,
+                                        title: 'Buat Keluarga',
+                                        description:
+                                            'Daftar dan buat akun keluarga Anda dengan mudah dan gratis',
+                                    },
+                                    {
+                                        step: '2',
+                                        icon: FiUsers,
+                                        title: 'Tambah Anggota',
+                                        description:
+                                            'Undang anggota keluarga untuk bergabung dan mengelola keuangan bersama',
+                                    },
+                                    {
+                                        step: '3',
+                                        icon: FiFileText,
+                                        title: 'Catat Keuangan',
+                                        description:
+                                            'Mulai mencatat pemasukan dan pengeluaran keluarga setiap hari',
+                                    },
+                                    {
+                                        step: '4',
+                                        icon: FiTrendingUp,
+                                        title: 'Pantau Bersama',
+                                        description:
+                                            'Lihat dashboard dan laporan keuangan untuk membuat keputusan yang lebih baik',
+                                    },
+                                ].map((item, index) => (
+                                    <Timeline.Item key={`timeline-item-${index}`}>
+                                        <Timeline.Connector>
+                                            <Timeline.Separator />
+                                            <Timeline.Indicator>
+                                                <Icon as={item.icon} />
+                                            </Timeline.Indicator>
+                                        </Timeline.Connector>
+                                        <Timeline.Content>
+                                            <Timeline.Title>{item.title}</Timeline.Title>
+                                            <Timeline.Description>{item.description}</Timeline.Description>
+                                        </Timeline.Content>
+                                    </Timeline.Item>
+                                ))}
+                        </Timeline.Root>
                     </VStack>
                 </Container>
             </Box>
 
             {/* Why Super Family Section */}
             <Box py={16} bg="bg">
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
+                <Container maxW="container.xl" px={{ base: 4 }}>
                     <VStack gap={12} align="center">
                         <Box textAlign="center" maxW="2xl">
                             <Heading size="xl" color="text" mb={4}>
@@ -410,7 +276,7 @@ export const Landing: React.FC = () => {
                         </Box>
 
                         <SimpleGrid
-                            columns={{ base: 1, md: 3 }}
+                            columns={{ base: 1 }}
                             gap={8}
                             w="full"
                         >
@@ -473,93 +339,10 @@ export const Landing: React.FC = () => {
                 </Container>
             </Box>
 
-            {/* Testimonials Section */}
-            <Box py={16} id="testimonials" bg="cardBg">
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
-                    <VStack gap={12} align="center">
-                        <Box textAlign="center" maxW="2xl">
-                            <Heading size="xl" color="text" mb={4}>
-                                Kata Pengguna Super Family
-                            </Heading>
-                            <Text fontSize="lg" color="subtext">
-                                Lihat bagaimana Super Family membantu keluarga
-                                lainnya
-                            </Text>
-                        </Box>
-
-                        <SimpleGrid
-                            columns={{ base: 1, md: 3 }}
-                            gap={6}
-                            w="full"
-                        >
-                            {[
-                                {
-                                    name: 'Budi Santoso',
-                                    role: 'Kepala Keluarga',
-                                    quote:
-                                        'Super Family sangat membantu kami mengatur keuangan. Yang paling penting, gratis dan mudah digunakan!',
-                                },
-                                {
-                                    name: 'Siti Nurhaliza',
-                                    role: 'Ibu Rumah Tangga',
-                                    quote:
-                                        'Sekarang semua anggota keluarga bisa ikut mencatat pengeluaran. Lebih transparan dan terorganisir.',
-                                },
-                                {
-                                    name: 'Ahmad Hidayat',
-                                    role: 'Ayah dari 2 anak',
-                                    quote:
-                                        'Laporan bulanan otomatisnya sangat membantu untuk evaluasi. Recommended banget!',
-                                },
-                            ].map((testimonial, index) => (
-                                <Box
-                                    key={index}
-                                    bg="cardBg"
-                                    p={6}
-                                    borderRadius="lg"
-                                    shadow="sm"
-                                    borderWidth="1px"
-                                    borderColor="border"
-                                >
-                                    <VStack align="flex-start" gap={4}>
-                                        <HStack gap={2} color="warning.500">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Icon
-                                                    key={i}
-                                                    as={FiCheckCircle}
-                                                    boxSize={4}
-                                                />
-                                            ))}
-                                        </HStack>
-                                        <Text color="subtext" fontSize="sm">
-                                            {testimonial.quote}
-                                        </Text>
-                                        <VStack align="flex-start" gap={1}>
-                                            <Text
-                                                fontWeight="semibold"
-                                                color="text"
-                                            >
-                                                {testimonial.name}
-                                            </Text>
-                                            <Text
-                                                fontSize="sm"
-                                                color="subtext"
-                                            >
-                                                {testimonial.role}
-                                            </Text>
-                                        </VStack>
-                                    </VStack>
-                                </Box>
-                            ))}
-                        </SimpleGrid>
-                    </VStack>
-                </Container>
-            </Box>
-
             {/* Final CTA Section */}
-            <Box py={20} bg="brand.500">
-                <Container maxW="container.lg" px={{ base: 4, md: 6 }}>
-                    <VStack gap={8} align="center" textAlign="center">
+            <Box py={8} bg="brand.500">
+                <Container maxW="container.lg" px={{ base: 4 }}>
+                    <VStack gap={8} align="stretch" textAlign="center">
                         <Heading
                             size="xl"
                             color="white"
@@ -569,7 +352,7 @@ export const Landing: React.FC = () => {
                             Mulai hari ini, buat keuangan keluarga lebih sehat.
                         </Heading>
                         <Text
-                            fontSize={{ base: 'lg', md: 'xl' }}
+                            fontSize='sm'
                             color="brand.100"
                             maxW="xl"
                         >
@@ -579,58 +362,16 @@ export const Landing: React.FC = () => {
                         </Text>
                         <Link href="/register">
                             <Button
-                                colorPalette="white"
-                                size="lg"
+                                colorPalette="orange"
+                                size="xl"
+                                w='full'
+                                rounded='xl'
                             >
                                 Gunakan Sekarang (Gratis)
+                                <FiArrowRight />
                             </Button>
                         </Link>
                     </VStack>
-                </Container>
-            </Box>
-
-            {/* Footer */}
-            <Box py={8} bg="cardBg" borderTopWidth="1px" borderColor="border">
-                <Container maxW="container.xl" px={{ base: 4, md: 6 }}>
-                    <Flex
-                        direction={{ base: 'column', md: 'row' }}
-                        align="center"
-                        justify="space-between"
-                        gap={4}
-                    >
-                        <Text color="subtext" fontSize="sm">
-                            © Super Family 2025
-                        </Text>
-                        <HStack gap={6}>
-                            <Text
-                                as="a"
-                                color="subtext"
-                                fontSize="sm"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                            >
-                                Features
-                            </Text>
-                            <Text
-                                as="a"
-                                color="subtext"
-                                fontSize="sm"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                            >
-                                How it Works
-                            </Text>
-                            <Text
-                                as="a"
-                                color="subtext"
-                                fontSize="sm"
-                                _hover={{ color: 'primary' }}
-                                cursor="pointer"
-                            >
-                                Testimonials
-                            </Text>
-                        </HStack>
-                    </Flex>
                 </Container>
             </Box>
         </Box>
