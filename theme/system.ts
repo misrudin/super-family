@@ -84,9 +84,6 @@ const config = defineConfig({
         primary: {
           value: { _light: '{colors.brand.500}', _dark: '{colors.brand.400}' },
         },
-        border: {
-          value: { _light: '{colors.gray.200}', _dark: '{colors.gray.700}' },
-        },
       },
       radii: {
         container: { value: '{radii.lg}' },

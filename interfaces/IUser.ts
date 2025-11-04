@@ -7,7 +7,7 @@ export interface IUser {
     phone?: string;
     role: 'admin' | 'member';
     family?: IFamily;
-    created_at: string;
+    created_at?: string;
     updated_at?: string;
 }
 

@@ -1,4 +1,5 @@
 import { Provider } from "@/components/ui/provider";
+import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
       </QueryClientProvider>
+      <Toaster />
     </Provider>
   )
 }
