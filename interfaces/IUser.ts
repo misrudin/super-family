@@ -3,9 +3,9 @@ import { IFamily } from "./IFamily";
 export interface IUser {
     id: string;
     name: string;
-    email: string;
+    email?: string;
     phone?: string;
-    role: 'admin' | 'member';
+    role?: 'admin' | 'member';
     family?: IFamily;
     created_at?: string;
     updated_at?: string;

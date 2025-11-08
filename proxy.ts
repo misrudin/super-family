@@ -88,6 +88,7 @@ export function proxy(request: NextRequest) {
     requestHeaders.set('x-user-id', payload.userId);
     requestHeaders.set('x-user-email', payload.email);
     requestHeaders.set('x-user-role', payload.role);
+    requestHeaders.set('x-family-id', payload.familyId);
 
     return NextResponse.next({
         request: {

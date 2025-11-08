@@ -14,6 +14,7 @@ export interface JWTPayload {
     userId: string;
     email: string;
     role: string;
+    familyId: string;
     iat?: number;
     exp?: number;
 }
@@ -22,6 +23,7 @@ export interface JwtUserShape {
     id: string;
     email: string;
     role: string;
+    familyId: string;
 }
 
 export const generateTokens = (user: JwtUserShape) => {
@@ -29,6 +31,7 @@ export const generateTokens = (user: JwtUserShape) => {
         userId: user.id,
         email: user.email,
         role: user.role,
+        familyId: user.familyId,
     };
 
     // Generate access token
@@ -85,6 +88,6 @@ const getExpirationTime = (expiresIn: ExpiresIn): number => {
 
     const value = parseInt(match[1]);
     const unit = match[2] as TimeUnit;
-    
+
     return value * timeUnits[unit];
 };

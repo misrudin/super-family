@@ -7,7 +7,7 @@ export interface ITransaction {
     amount: number;
     category: ICategory;
     user: IUser;
-    family: IFamily;
+    family?: IFamily;
     transaction_date: string;
     transaction_no: string;
     created_at: string;

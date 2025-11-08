@@ -3,7 +3,7 @@ export interface ICategory {
     name: string;
     slug: string;
     type: "income" | "expense";
-    created_at: string;
+    created_at?: string;
     updated_at?: string;
 }
 

@@ -68,6 +68,7 @@ export default async function handler(
             id: safeUser.id,
             email: safeUser.email,
             role: safeUser.role,
+            familyId: user.family_id,
         });
 
         await supabase.from("users").update({

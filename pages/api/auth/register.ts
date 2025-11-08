@@ -73,6 +73,7 @@ export default async function handler(
             email: newUser.email as string,
             phone: newUser.phone as string | undefined,
             role: newUser.role as 'admin' | 'member',
+            familyId: newUser.family_id as string,
             created_at: newUser.created_at as string,
             updated_at: newUser.updated_at as string | undefined,
         };
@@ -82,6 +83,7 @@ export default async function handler(
             id: safeUser.id,
             email: safeUser.email,
             role: safeUser.role,
+            familyId: safeUser.familyId,
         });
 
         return res.status(201).json({

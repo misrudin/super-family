@@ -4,6 +4,7 @@ export interface AuthenticatedUser {
   id: string;
   email: string;
   role: string;
+  familyId: string;
 }
 
 /**
@@ -15,6 +16,7 @@ export function getAuthenticatedUser(req: NextApiRequest): AuthenticatedUser | n
   const userId = req.headers['x-user-id'] as string;
   const userEmail = req.headers['x-user-email'] as string;
   const userRole = req.headers['x-user-role'] as string;
+  const familyId = req.headers['x-family-id'] as string;
 
   if (!userId || !userEmail || !userRole) {
     return null;
@@ -24,6 +26,7 @@ export function getAuthenticatedUser(req: NextApiRequest): AuthenticatedUser | n
     id: userId,
     email: userEmail,
     role: userRole,
+    familyId: familyId,
   };
 }
 
