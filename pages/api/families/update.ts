@@ -3,7 +3,7 @@ import { IFamily } from "@/interfaces/IFamily";
 import { getAuthenticatedUser } from "@/utils/auth";
 import { createLogSilent } from "@/utils/logs";
 import { supabase } from "@/utils/supabase";
-import { updateFamilySchema } from "@/validations/families";
+import { familySchema } from "@/validations/families";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { ZodIssue } from "zod";
 
@@ -28,7 +28,7 @@ export default async function handler(
             });
         }
 
-        const validationResult = updateFamilySchema.safeParse(req.body);
+        const validationResult = familySchema.safeParse(req.body);
         if (!validationResult.success) {
             return res.status(400).json({
                 success: false,

@@ -19,7 +19,16 @@ export default async function handler(
         const authenticatedUser = getAuthenticatedUser(req);
         const { data: user, error: userError } = await supabase
             .from("users")
-            .select("*")
+            .select(`
+                *,
+                family:family_id (
+                    id,
+                    name,
+                    slug,
+                    created_at,
+                    updated_at
+                )
+            `)
             .eq("id", authenticatedUser.id)
             .single();
 
@@ -32,10 +41,19 @@ export default async function handler(
             });
         }
 
+        const safeUser: IUser = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            family: user.family,
+        };
+
         return res.status(200).json({
             success: true,
             message: "Data profil berhasil diambil",
-            data: user,
+            data: safeUser,
         });
     } catch (error: unknown) {
         console.error("Error fetching profile:", error);

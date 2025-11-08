@@ -36,7 +36,13 @@ export const useAction = () => {
                 })
 
                 saveCredentials(response.data.data);
-                router.push("/dashboard");
+
+                const redirect = router.query.redirect as string;
+                if (redirect) {
+                    router.push(redirect);
+                } else {
+                    router.push("/dashboard");
+                }
             } else {
                 toaster.create({
                     title: "Login Failed",

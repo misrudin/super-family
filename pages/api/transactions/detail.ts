@@ -79,6 +79,7 @@ export default async function handler(
             data: {
                 id: transaction.id as string,
                 amount: transaction.amount as number,
+                note: transaction.note as string,
                 category: {
                     id: transaction.categories?.id || transaction.category_id,
                     name: transaction.categories?.name || "",

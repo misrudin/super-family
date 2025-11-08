@@ -1,9 +1,12 @@
+import { useAuth } from '@/providers/useAuth';
 import { Avatar, Box, Button, HStack, Spacer, Text } from '@chakra-ui/react';
+import Link from 'next/link';
 import { JSX, memo } from 'react';
 import { FiCalendar } from 'react-icons/fi';
 import WaveCard from './WaveCard';
 
 const HeroSection: React.FC = (): JSX.Element => {
+    const { profile } = useAuth()
     return (
         <Box
             bg='cardBg'
@@ -23,15 +26,17 @@ const HeroSection: React.FC = (): JSX.Element => {
                 borderColor='rgba(255, 255, 255, 0.25)'
                 backdropFilter='blur(10px)'
             >
-                <HStack>
-                    <Avatar.Root colorPalette='orange' size='xl'>
-                        <Avatar.Fallback name="Eka Nurcahyati" />
-                    </Avatar.Root>
-                    <Box>
-                        <Text fontSize='sm' fontWeight='semibold'>Eka Nurcahyati</Text>
-                        <Text fontSize='xs' color='gray.500'>Super Family</Text>
-                    </Box>
-                </HStack>
+                <Link href="/profile">
+                    <HStack>
+                        <Avatar.Root colorPalette='orange' size='xl'>
+                            <Avatar.Fallback name={profile?.name || ''} />
+                        </Avatar.Root>
+                        <Box>
+                            <Text fontSize='sm' fontWeight='semibold'>{profile?.name}</Text>
+                            <Text fontSize='xs' color='gray.500'>{profile?.family?.name || '-'}</Text>
+                        </Box>
+                    </HStack>
+                </Link>
                 <Button rounded='full' colorPalette="orange" variant="surface" size='xs'>
                     <FiCalendar /> Dec 2025
                 </Button>

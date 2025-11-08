@@ -1,9 +1,13 @@
+import { useAuth } from '@/providers/useAuth';
 import { Avatar, Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
 import { JSX, memo } from 'react';
 import { BsGearFill } from 'react-icons/bs';
 import { FiMail, FiPhone } from 'react-icons/fi';
 
 const Account: React.FC = (): JSX.Element => {
+    const { profile } = useAuth()
+
+    const phoneNumber = profile?.phone ? `+62 ${profile?.phone.replace(/^0/, '')}` : '-';
     return (
         <Box px='4'>
             <HStack
@@ -12,18 +16,18 @@ const Account: React.FC = (): JSX.Element => {
             >
                 <HStack align='start'>
                     <Avatar.Root colorPalette='orange' size='2xl' rounded='sm'>
-                        <Avatar.Fallback name="Eka Nurcahyati" />
+                        <Avatar.Fallback name={profile?.name || ''} />
                     </Avatar.Root>
                     <Box>
-                        <Text fontSize='sm' fontWeight='semibold'>Eka Nurcahyati</Text>
+                        <Text fontSize='sm' fontWeight='semibold'>{profile?.name}</Text>
                         <VStack mt='1' gap='1' align='stretch'>
                             <HStack align='center' color='gray.600' gap='2' fontSize='xs'>
                                 <FiMail />
-                                <Text fontSize='xs'>ekanurcahyati@gmail.com</Text>
+                                <Text fontSize='xs'>{profile?.email || ''}</Text>
                             </HStack>
                             <HStack align='center' color='gray.600' gap='2' fontSize='xs'>
                                 <FiPhone />
-                                <Text fontSize='xs'>62 812-3456-7890</Text>
+                                <Text fontSize='xs'>{phoneNumber}</Text>
                             </HStack>
                         </VStack>
                     </Box>

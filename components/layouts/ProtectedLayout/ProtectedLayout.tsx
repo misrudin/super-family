@@ -1,4 +1,5 @@
-import { Box, IconButton } from "@chakra-ui/react";
+import { ModalTransaction } from "@/components/transaction";
+import { Box, IconButton, useDisclosure } from "@chakra-ui/react";
 import { FiPlus } from "react-icons/fi";
 import { Header } from "./Partials";
 
@@ -8,6 +9,7 @@ interface ProtectedLayoutProps {
 }
 
 export const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children, isShowHeader = true }) => {
+    const { open: isOpenModalTransaction, onOpen: onOpenModalTransaction, onClose: onCloseModalTransaction } = useDisclosure();
     return (
         <Box
             as="main"
@@ -29,10 +31,13 @@ export const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children, isSh
                     bottom={6}
                     right={6}
                     zIndex={1000}
+                    onClick={onOpenModalTransaction}
                 >
                     <FiPlus />
                 </IconButton>
             </Box>
+
+            <ModalTransaction isOpen={isOpenModalTransaction} onClose={onCloseModalTransaction} />
         </Box>
     );
 };

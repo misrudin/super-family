@@ -10,6 +10,7 @@ export interface ITransaction {
     family?: IFamily;
     transaction_date: string;
     transaction_no: string;
+    note: string;
     created_at: string;
     updated_at?: string;
 }

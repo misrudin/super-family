@@ -2,16 +2,13 @@ import {
   FC,
   ReactNode,
   createContext,
-  useContext,
-  useEffect,
-  useState
+  useContext
 } from 'react';
 
 import { getCookies } from '@/helpers/credentials';
-import { IBaseResponse } from '@/interfaces/IBaseResponse';
 import { IUser } from '@/interfaces/IUser';
 import { getProfileFromAPI } from '@/lib/api/account/account.api';
-import { AxiosResponse } from 'axios';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface IUseAuth {
   isAuth: boolean;
@@ -42,32 +39,25 @@ export const AuthProvider: FC<TAuthProvider> = ({
   token,
   initialProfile,
 }) => {
-  const [profile, setProfile] = useState<any | null>(initialProfile || null);
   const isGuest = getCookies('isGuest') === 'true' ? true : false;
+  const queryClient = useQueryClient()
 
-  const getProfile = async () => {
-    try {
-      const response: AxiosResponse<IBaseResponse<IUser>> =
-        await getProfileFromAPI();
-      if (response.status === 200) {
-        setProfile(response.data.data);
-      }
-    } catch (error) {
-      resetProfile();
-    }
-  };
+  const { data: profile, refetch: refetchProfile } = useQuery({
+    queryKey: ['profile'],
+    queryFn: () => getProfileFromAPI(),
+    enabled: !!token && !isGuest,
+    select: (data) => data.data?.data || null,
+  })
 
-  const resetProfile = () => setProfile(null);
-
-  useEffect(() => {
-    token && !isGuest && getProfile();
-  }, [token, isGuest]);
+  function resetProfile() {
+    queryClient.setQueryData(['profile'], null)
+  }
 
   const value = {
     isAuth: !!token,
     isGuest,
-    profile,
-    reFetch: getProfile,
+    profile: profile || initialProfile,
+    reFetch: refetchProfile,
     token,
     resetProfile,
   };

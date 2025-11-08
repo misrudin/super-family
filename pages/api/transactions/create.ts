@@ -1,9 +1,11 @@
+import { date } from "@/helpers/date";
+import { generateTransactionNo } from "@/helpers/string";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
 import { ITransaction } from "@/interfaces/ITransaction";
 import { getAuthenticatedUser } from "@/utils/auth";
 import { createLogSilent } from "@/utils/logs";
 import { supabase } from "@/utils/supabase";
-import { createTransactionSchema } from "@/validations/transactions";
+import { transactionSchema } from "@/validations/transactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { ZodIssue } from "zod";
 
@@ -19,7 +21,9 @@ export default async function handler(
     }
 
     try {
-        const validationResult = createTransactionSchema.safeParse(req.body);
+        const authenticatedUser = getAuthenticatedUser(req);
+
+        const validationResult = transactionSchema.safeParse(req.body);
         if (!validationResult.success) {
             return res.status(400).json({
                 success: false,
@@ -28,7 +32,7 @@ export default async function handler(
             });
         }
 
-        const { amount, category_id, user_id, family_id, transaction_date, transaction_no } = validationResult.data;
+        const { amount, category_id, note } = validationResult.data;
 
         // Cek apakah category ada
         const { data: category, error: categoryError } = await supabase
@@ -48,7 +52,7 @@ export default async function handler(
         const { data: transactionUser, error: userError } = await supabase
             .from("users")
             .select("id, name, email, phone, role, created_at, updated_at")
-            .eq("id", user_id)
+            .eq("id", authenticatedUser.id)
             .single();
 
         if (!transactionUser || userError) {
@@ -62,7 +66,7 @@ export default async function handler(
         const { data: family, error: familyError } = await supabase
             .from("families")
             .select("id, name, slug, created_at, updated_at")
-            .eq("id", family_id)
+            .eq("id", authenticatedUser.familyId)
             .single();
 
         if (!family || familyError) {
@@ -78,10 +82,11 @@ export default async function handler(
                 {
                     amount,
                     category_id,
-                    user_id,
-                    family_id,
-                    transaction_date,
-                    transaction_no,
+                    user_id: authenticatedUser.id,
+                    family_id: authenticatedUser.familyId,
+                    note,
+                    transaction_date: date().toISOString(),
+                    transaction_no: generateTransactionNo(),
                 },
             ])
             .select()
@@ -101,7 +106,7 @@ export default async function handler(
                     amount: newTransaction.amount,
                 },
                 user_id: user.id,
-                family_id: family_id,
+                family_id: authenticatedUser.familyId,
             });
         }
 
@@ -111,6 +116,7 @@ export default async function handler(
             data: {
                 id: newTransaction.id as string,
                 amount: newTransaction.amount as number,
+                note: newTransaction.note as string,
                 category: {
                     id: category.id,
                     name: category.name,

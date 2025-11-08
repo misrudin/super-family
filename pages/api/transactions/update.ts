@@ -3,7 +3,7 @@ import { ITransaction } from "@/interfaces/ITransaction";
 import { getAuthenticatedUser } from "@/utils/auth";
 import { createLogSilent } from "@/utils/logs";
 import { supabase } from "@/utils/supabase";
-import { updateTransactionSchema } from "@/validations/transactions";
+import { transactionSchema } from "@/validations/transactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { ZodIssue } from "zod";
 
@@ -28,7 +28,7 @@ export default async function handler(
             });
         }
 
-        const validationResult = updateTransactionSchema.safeParse(req.body);
+        const validationResult = transactionSchema.safeParse(req.body);
         if (!validationResult.success) {
             return res.status(400).json({
                 success: false,
@@ -69,36 +69,6 @@ export default async function handler(
                 return res.status(404).json({
                     success: false,
                     message: "Kategori tidak ditemukan",
-                });
-            }
-        }
-
-        if (updateData.user_id) {
-            const { data: user, error: userError } = await supabase
-                .from("users")
-                .select("id")
-                .eq("id", updateData.user_id)
-                .single();
-
-            if (!user || userError) {
-                return res.status(404).json({
-                    success: false,
-                    message: "User tidak ditemukan",
-                });
-            }
-        }
-
-        if (updateData.family_id) {
-            const { data: family, error: familyError } = await supabase
-                .from("families")
-                .select("id")
-                .eq("id", updateData.family_id)
-                .single();
-
-            if (!family || familyError) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Keluarga tidak ditemukan",
                 });
             }
         }
@@ -163,6 +133,7 @@ export default async function handler(
             data: {
                 id: updatedTransaction.id as string,
                 amount: updatedTransaction.amount as number,
+                note: updatedTransaction.note as string,
                 category: {
                     id: updatedTransaction.categories?.id || updatedTransaction.category_id,
                     name: updatedTransaction.categories?.name || "",

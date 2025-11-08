@@ -17,3 +17,13 @@ export const logoutFromAPI = () => {
     };
     return callAPIContent(options);
 };
+
+export const joinFamilyFromAPI = (params: { family_id: string }) => {
+    const options: IPayloadAPI = {
+        method: 'POST',
+        servicePath: 'account',
+        uri: 'join-family',
+        params,
+    };
+    return callAPIContent(options);
+};

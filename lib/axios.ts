@@ -18,7 +18,7 @@ export interface IDefaultHeaders {
 
 export default interface IPayloadAPI {
     method: ListMethods;
-    uri: string;
+    uri?: string;
     params?: object;
     additionalHeader?: object;
     servicePath?: string

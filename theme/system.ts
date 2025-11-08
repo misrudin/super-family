@@ -69,9 +69,6 @@ const config = defineConfig({
     },
     semanticTokens: {
       colors: {
-        bg: {
-          value: { _light: '{colors.gray.50}', _dark: '{colors.gray.900}' },
-        },
         cardBg: {
           value: { _light: '{colors.white}', _dark: '{colors.gray.800}' },
         },
