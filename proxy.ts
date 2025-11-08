@@ -1,27 +1,28 @@
 import { verifyToken } from '@/utils/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { keyToken } from './helpers/credentials';
 
-// Routes yang memerlukan autentikasi
 const protectedRoutes = [
-    // '/dashboard',
-    // '/profile',
+    '/dashboard',
+    '/profile',
     '/family',
     '/transactions',
     '/categories',
     '/settings'
 ];
 
-// API routes yang memerlukan autentikasi
 const protectedApiRoutes = [
-    '/api/family',
-    '/api/transactions',
-    '/api/categories',
-    '/api/profile',
-    '/api/settings'
+    '/api/account'
 ];
 
-export function middleware(request: NextRequest) {
+const guestOnlyRoutes = [
+    '/login',
+    '/register'
+];
+
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
+    const token = getTokenFromRequest(request);
 
     // Cek apakah ini adalah API route
     const isApiRoute = pathname.startsWith('/api/');
@@ -31,13 +32,17 @@ export function middleware(request: NextRequest) {
         ? protectedApiRoutes.some(route => pathname.startsWith(route))
         : protectedRoutes.some(route => pathname.startsWith(route));
 
+    const isGuestOnlyRoute = guestOnlyRoutes.some(route => pathname.startsWith(route));
+
+    // Jika user sudah login dan mengakses guest-only route (login/register), redirect ke dashboard
+    if (!!token && isGuestOnlyRoute && !isApiRoute) {
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
     // Jika bukan protected route, lanjutkan
     if (!isProtectedRoute) {
         return NextResponse.next();
     }
-
-    // Jika protected route, cek token
-    const token = getTokenFromRequest(request);
 
     if (!token) {
         if (isApiRoute) {
@@ -99,7 +104,7 @@ function getTokenFromRequest(request: NextRequest): string | null {
     }
 
     // Cek cookie (fallback)
-    const tokenCookie = request.cookies.get('token');
+    const tokenCookie = request.cookies.get(keyToken);
     if (tokenCookie) {
         return tokenCookie.value;
     }

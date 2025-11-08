@@ -18,11 +18,3 @@ export interface ILoginResponse {
     expires_in: number;
     token_type: string;
 }
-
-export interface IRegisterResponse {
-    user: IUser;
-    token: string;
-    refresh_token: string;
-    expires_in: number;
-    token_type: string;
-}

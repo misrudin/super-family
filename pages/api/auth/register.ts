@@ -1,15 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "@/utils/supabase";
-import { IRegisterResponse } from "@/interfaces/IUser";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
-import { registerSchema } from "@/validations/users";
-import type { ZodIssue } from "zod";
+import { ILoginResponse } from "@/interfaces/IUser";
 import { generateTokens } from "@/utils/jwt";
+import { supabase } from "@/utils/supabase";
+import { registerSchema } from "@/validations/users";
 import bcrypt from "bcrypt";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { ZodIssue } from "zod";
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<IBaseResponse<IRegisterResponse>>
+    res: NextApiResponse<IBaseResponse<ILoginResponse>>
 ) {
     if (req.method !== "POST") {
         return res.status(405).json({
@@ -17,7 +17,7 @@ export default async function handler(
             message: "Method not allowed",
         });
     }
-    
+
     try {
         const validationResult = registerSchema.safeParse(req.body);
         if (!validationResult.success) {

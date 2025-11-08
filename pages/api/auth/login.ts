@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "@/utils/supabase";
-import { ILoginResponse } from "@/interfaces/IUser";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
-import { loginSchema } from "@/validations/users";
-import type { ZodIssue } from "zod";
+import { ILoginResponse } from "@/interfaces/IUser";
 import { generateTokens } from "@/utils/jwt";
+import { supabase } from "@/utils/supabase";
+import { loginSchema } from "@/validations/users";
 import bcrypt from "bcrypt";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { ZodIssue } from "zod";
 
 export default async function handler(
     req: NextApiRequest,
@@ -20,7 +20,7 @@ export default async function handler(
 
     try {
         const validationResult = loginSchema.safeParse(req.body);
-        
+
         if (!validationResult.success) {
             return res.status(400).json({
                 success: false,
@@ -38,21 +38,21 @@ export default async function handler(
             .single();
 
         if (userError || !user) {
-            return res.status(401).json({
+            return res.status(400).json({
                 success: false,
                 message: "Email atau password salah",
             });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        
+
         if (!isPasswordValid) {
-            return res.status(401).json({
+            return res.status(400).json({
                 success: false,
                 message: "Email atau password salah",
             });
         }
-        
+
         const safeUser = {
             id: user.id as string,
             name: user.name as string,
@@ -69,6 +69,10 @@ export default async function handler(
             email: safeUser.email,
             role: safeUser.role,
         });
+
+        await supabase.from("users").update({
+            is_login: true,
+        }).eq("id", safeUser.id);
 
         return res.status(200).json({
             success: true,
