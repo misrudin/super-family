@@ -60,7 +60,7 @@ const Wrapper: React.FC = (): JSX.Element => {
                         {members.slice(0, 5).map((member, index) => {
                             const colors = ['pink', 'green', 'blue', 'purple', 'orange'];
                             return (
-                                <Avatar.Root key={member.id} css={ringCss} colorPalette={colors[index % colors.length] as any}>
+                                <Avatar.Root key={member.id} css={ringCss} colorPalette={colors[index % colors.length]}>
                                     <Avatar.Fallback name={member.name || ''} />
                                 </Avatar.Root>
                             );
