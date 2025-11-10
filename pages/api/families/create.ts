@@ -1,3 +1,4 @@
+import { generateSlug } from "@/helpers/string";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
 import { IFamily } from "@/interfaces/IFamily";
 import { getAuthenticatedUser } from "@/utils/auth";
@@ -28,7 +29,9 @@ export default async function handler(
             });
         }
 
-        const { name, slug } = validationResult.data;
+        const { name } = validationResult.data;
+
+        const slug = generateSlug(name);
 
         // Cek apakah slug sudah ada
         const { data: existingFamily, error: checkError } = await supabase
@@ -40,7 +43,7 @@ export default async function handler(
         if (existingFamily) {
             return res.status(409).json({
                 success: false,
-                message: "Slug sudah digunakan",
+                message: "Keluarga dengan nama ini sudah ada",
             });
         }
 

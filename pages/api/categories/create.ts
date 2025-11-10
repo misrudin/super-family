@@ -1,3 +1,4 @@
+import { generateSlug } from "@/helpers/string";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
 import { ICategory } from "@/interfaces/ICategory";
 import { getAuthenticatedUser } from "@/utils/auth";
@@ -28,7 +29,9 @@ export default async function handler(
             });
         }
 
-        const { name, type, slug } = validationResult.data;
+        const { name, type } = validationResult.data;
+
+        const slug = generateSlug(name);
 
         // Cek apakah slug sudah ada
         const { data: existingCategory, error: checkError } = await supabase
@@ -40,7 +43,7 @@ export default async function handler(
         if (existingCategory) {
             return res.status(409).json({
                 success: false,
-                message: "Slug sudah digunakan",
+                message: "Kategori dengan nama ini sudah ada",
             });
         }
 
@@ -63,7 +66,7 @@ export default async function handler(
         if (insertError) {
             throw insertError;
         }
-        
+
         const user = getAuthenticatedUser(req);
         createLogSilent({
             details: {

@@ -57,27 +57,6 @@ export default async function handler(
             throw checkError;
         }
 
-        // Jika slug diupdate, cek apakah slug sudah digunakan oleh keluarga lain
-        if (updateData.slug) {
-            const { data: slugExists, error: slugCheckError } = await supabase
-                .from("families")
-                .select("id")
-                .eq("slug", updateData.slug)
-                .neq("id", id)
-                .single();
-
-            if (slugExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: "Slug sudah digunakan",
-                });
-            }
-
-            if (slugCheckError && slugCheckError.code !== "PGRST116") {
-                throw slugCheckError;
-            }
-        }
-
         const { data: updatedFamily, error: updateError } = await supabase
             .from("families")
             .update({

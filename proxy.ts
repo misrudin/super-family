@@ -12,7 +12,11 @@ const protectedRoutes = [
 ];
 
 const protectedApiRoutes = [
-    '/api/account'
+    '/api/account',
+    '/api/categories',
+    '/api/transactions',
+    '/api/families',
+    '/api/dashboard'
 ];
 
 const guestOnlyRoutes = [

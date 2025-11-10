@@ -24,10 +24,9 @@ export const updateCategoryFromAPI = (params: IParamUpdateCategory & { id: strin
     const { id, ...bodyParams } = params;
     const options: IPayloadAPI = {
         method: 'PUT',
-        servicePath: 'categories',
-        uri: 'update',
+        servicePath: "categories",
+        uri: `update?id=${id}`,
         params: {
-            id,
             ...bodyParams,
         },
     };

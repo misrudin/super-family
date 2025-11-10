@@ -1,3 +1,4 @@
+import { IUser } from '@/interfaces/IUser';
 import { getFamilyDetailFromAPI } from '@/lib/api/families/families.api';
 import { useAuth } from '@/providers/useAuth';
 import { Avatar, AvatarGroup, Box, Button, EmptyState, HStack, Skeleton, SkeletonCircle, Stack, Text, VStack, useDisclosure } from '@chakra-ui/react';
@@ -70,27 +71,25 @@ const Family: React.FC = (): JSX.Element => {
                                 mt='2'
                                 color="orange.600"
                                 cursor='pointer'
+                                onClick={onOpenModalFamily}
                             >
                                 <Text fontWeight='medium' fontSize='sm'>{familyDetail?.name}</Text>
                                 <FiArrowRight />
                             </HStack>
                             <HStack gap="4" overflowX='auto' py='2' mt='2'>
                                 <AvatarGroup gap="0" spaceX="-3" size="lg" stacking="first-on-top">
-                                    <Avatar.Root colorPalette="pink">
-                                        <Avatar.Fallback name="Random" />
-                                        <Avatar.Image src="https://randomuser.me/api/portraits/men/70.jpg" />
-                                    </Avatar.Root>
-                                    <Avatar.Root colorPalette="green">
-                                        <Avatar.Fallback name="Random" />
-                                        <Avatar.Image src="https://randomuser.me/api/portraits/men/54.jpg" />
-                                    </Avatar.Root>
-                                    <Avatar.Root colorPalette="blue">
-                                        <Avatar.Fallback name="Random" />
-                                        <Avatar.Image src="https://randomuser.me/api/portraits/men/42.jpg" />
-                                    </Avatar.Root>
-                                    <Avatar.Root>
-                                        <Avatar.Fallback fontSize='xs'>+3</Avatar.Fallback>
-                                    </Avatar.Root>
+                                    {familyDetail?.members.slice(0, 5).map((member: IUser) => (
+                                        <Avatar.Root key={member.id} colorPalette={member.role === 'admin' ? 'pink' : 'green'}>
+                                            <Avatar.Fallback name={member.name} />
+                                        </Avatar.Root>
+                                    ))}
+                                    {
+                                        familyDetail?.members.length > 5 && (
+                                            <Avatar.Root>
+                                                <Avatar.Fallback fontSize='xs'>+{familyDetail?.members.length - 5}</Avatar.Fallback>
+                                            </Avatar.Root>
+                                        )
+                                    }
                                 </AvatarGroup>
                             </HStack>
                         </>

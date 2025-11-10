@@ -1,5 +1,6 @@
 import { BottomDrawer } from "@/components/drawer";
 import { toaster } from "@/components/ui/toaster";
+import { formatRupiahInput, parseRupiah } from "@/helpers/string";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
 import { IBasicModal } from "@/interfaces/IBasicModal";
 import { ICategory } from "@/interfaces/ICategory";
@@ -9,11 +10,11 @@ import { createTransactionFromAPI, updateTransactionFromAPI } from "@/lib/api/tr
 import { IParamCreateTransaction, IParamUpdateTransaction } from "@/lib/api/transactions/transactions.types";
 import { useAuth } from "@/providers/useAuth";
 import { transactionSchema } from "@/validations/transactions";
-import { Button, Field, Fieldset, HStack, Input, Select, Spinner, Textarea, createListCollection } from "@chakra-ui/react";
+import { Button, Combobox, Field, Fieldset, HStack, Input, InputGroup, Spinner, Textarea, useFilter, useListCollection } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { FC, useMemo } from "react";
+import React, { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -35,6 +36,23 @@ const ModalTransaction: FC<IModalTransactionProps> = ({ isOpen, onClose, selecte
         },
         mode: "all",
     });
+
+    // Reset form when selected transaction changes
+    React.useEffect(() => {
+        if (selected) {
+            reset({
+                amount: selected.amount || 0,
+                category_id: selected.category?.id || "",
+                note: selected.note || "",
+            });
+        } else {
+            reset({
+                amount: 0,
+                category_id: "",
+                note: "",
+            });
+        }
+    }, [selected, reset]);
 
     const { mutate: createTransactionMutation, isPending: loadingCreateTransaction } = useMutation({
         mutationFn: (data: IParamCreateTransaction) => createTransactionFromAPI(data),
@@ -85,30 +103,58 @@ const ModalTransaction: FC<IModalTransactionProps> = ({ isOpen, onClose, selecte
     })
 
     const onSubmit = (data: TransactionFormValues) => {
+        // Ensure amount is a number and positive
+        const amountValue = typeof data.amount === 'string' ? parseRupiah(data.amount) : Number(data.amount);
+
+        if (amountValue <= 0) {
+            toaster.create({
+                title: "Jumlah tidak valid",
+                description: "Jumlah transaksi harus lebih dari 0",
+                type: "error",
+                closable: true,
+            });
+            return;
+        }
+
+        const submitData = {
+            ...data,
+            amount: amountValue,
+        };
+
         if (selected) {
-            updateTransactionMutation(data);
+            updateTransactionMutation(submitData);
         } else {
-            createTransactionMutation(data);
+            createTransactionMutation(submitData);
         }
     }
 
-    const { data: categories, isLoading: loadingCategories } = useQuery({
+    const { data: categories, isLoading: loadingCategories, refetch: refetchCategories } = useQuery({
         queryKey: ['categories'],
         queryFn: () => getCategoriesFromAPI(),
         select: (data) => data.data?.data ?? [],
+        staleTime: 0, // Always fetch fresh data
+        refetchOnMount: true, // Refetch when component mounts
     });
 
-    const collection = useMemo(() => {
-        return createListCollection({
-            items: categories ?? [],
-            itemToString: (category: ICategory) => category.name,
-            itemToValue: (category: ICategory) => category.id,
-        })
-    }, [categories])
+    // Refetch categories when modal opens
+    React.useEffect(() => {
+        if (isOpen) {
+            refetchCategories();
+        }
+    }, [isOpen, refetchCategories]);
+
+    const { startsWith } = useFilter({ sensitivity: "base" })
+    const { collection: categoryCollection, filter: filterCategory, reset: resetCombobox } = useListCollection({
+        initialItems: categories,
+        filter: startsWith,
+        limit: 10,
+        itemToString: (item: ICategory) => item.name,
+        itemToValue: (item: ICategory) => item.id,
+    })
 
     return (
         <BottomDrawer
-            title={selected ? "Edit Transaksi" : "Buat Transaksi"}
+            title={selected ? "Edit Transaksi" : "Tambah Transaksi"}
             isOpen={isOpen}
             onClose={() => {
                 onClose()
@@ -117,7 +163,7 @@ const ModalTransaction: FC<IModalTransactionProps> = ({ isOpen, onClose, selecte
             footer={
                 <HStack justify='end'>
                     <Button colorPalette='gray' variant='subtle' onClick={onClose}>Batal</Button>
-                    <Button colorPalette='orange' variant='solid' type="submit" form="form-family" disabled={!isValid || !isDirty}
+                    <Button colorPalette='orange' variant='solid' type="submit" form="form-transaction" disabled={!isValid || !isDirty}
                         loading={loadingCreateTransaction || loadingUpdateTransaction}>Simpan</Button>
                 </HStack>
             }>
@@ -131,37 +177,49 @@ const ModalTransaction: FC<IModalTransactionProps> = ({ isOpen, onClose, selecte
                                 control={control}
                                 name="category_id"
                                 render={({ field }) => (
-                                    <Select.Root
-                                        name={field.name}
+                                    <Combobox.Root
+                                        collection={categoryCollection}
                                         value={field.value ? [field.value] : []}
-                                        onValueChange={({ value }) => field.onChange(value)}
-                                        onInteractOutside={() => field.onBlur()}
-                                        collection={collection}
+                                        onValueChange={(e) => {
+                                            const value = e.value[0] as string;
+                                            if (value) {
+                                                field.onChange(value);
+                                            }
+                                        }}
                                         size="lg"
+                                        openOnClick
+                                        onInputValueChange={(e) => filterCategory(e.inputValue)}
                                     >
-                                        <Select.HiddenSelect />
-                                        <Select.Control>
-                                            <Select.Trigger rounded="lg">
-                                                <Select.ValueText placeholder="Pilih kategori" />
-                                            </Select.Trigger>
-                                            <Select.IndicatorGroup>
+                                        <Combobox.Control>
+                                            <Combobox.Input
+                                                rounded="xl"
+                                                placeholder="Cari atau pilih kategori"
+                                                _placeholder={{ fontSize: 'sm' }}
+                                            />
+                                            <Combobox.IndicatorGroup>
                                                 {loadingCategories && (
                                                     <Spinner size="xs" borderWidth="1.5px" color="fg.muted" />
                                                 )}
-                                                <Select.Indicator />
-                                            </Select.IndicatorGroup>
-                                        </Select.Control>
-                                        <Select.Positioner>
-                                            <Select.Content>
-                                                {collection?.items.map((category) => (
-                                                    <Select.Item item={category} key={category.id}>
-                                                        {category.name}
-                                                        <Select.ItemIndicator />
-                                                    </Select.Item>
-                                                ))}
-                                            </Select.Content>
-                                        </Select.Positioner>
-                                    </Select.Root>
+                                                <Combobox.Trigger onClick={() => resetCombobox()} />
+                                            </Combobox.IndicatorGroup>
+                                        </Combobox.Control>
+                                        <Combobox.Positioner>
+                                            <Combobox.Content>
+                                                {categoryCollection?.items.length === 0 ? (
+                                                    <Combobox.Empty>Tidak ada kategori ditemukan</Combobox.Empty>
+                                                ) : (
+                                                    categoryCollection?.items.map((category) => (
+                                                        <Combobox.Item key={category.id} item={category}>
+                                                            <Combobox.ItemText>
+                                                                {category.name}
+                                                            </Combobox.ItemText>
+                                                            <Combobox.ItemIndicator />
+                                                        </Combobox.Item>
+                                                    ))
+                                                )}
+                                            </Combobox.Content>
+                                        </Combobox.Positioner>
+                                    </Combobox.Root>
                                 )}
                             />
                             <Field.ErrorText>{errors.category_id?.message}</Field.ErrorText>
@@ -169,7 +227,38 @@ const ModalTransaction: FC<IModalTransactionProps> = ({ isOpen, onClose, selecte
 
                         <Field.Root invalid={!!errors.amount}>
                             <Field.Label>Jumlah Transaksi</Field.Label>
-                            <Input {...register("amount")} rounded='xl' size='xl' name="amount" type="text" placeholder='Masukan jumlah transaksi' _placeholder={{ fontSize: 'sm' }} />
+                            <Controller
+                                control={control}
+                                name="amount"
+                                render={({ field }) => {
+                                    const displayValue = formatRupiahInput(field.value || '');
+                                    return (
+                                        <InputGroup startElement="Rp">
+                                            <Input
+                                                rounded='xl'
+                                                size='xl'
+                                                type="text"
+                                                placeholder='Masukan jumlah transaksi'
+                                                _placeholder={{ fontSize: 'sm' }}
+                                                value={displayValue}
+                                                onChange={(e) => {
+                                                    const inputValue = e.target.value;
+                                                    // Allow empty input
+                                                    if (inputValue === '') {
+                                                        field.onChange(0);
+                                                        return;
+                                                    }
+                                                    // Parse the input to get the numeric value
+                                                    const parsed = parseRupiah(inputValue);
+                                                    // Update the field with the numeric value
+                                                    field.onChange(parsed);
+                                                }}
+                                                onBlur={field.onBlur}
+                                            />
+                                        </InputGroup>
+                                    );
+                                }}
+                            />
                             <Field.ErrorText>{errors.amount?.message}</Field.ErrorText>
                         </Field.Root>
 

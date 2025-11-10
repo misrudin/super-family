@@ -1,6 +1,5 @@
 import { BottomDrawer } from "@/components/drawer";
 import { toaster } from "@/components/ui/toaster";
-import { generateSlug } from "@/helpers/string";
 import { IBaseResponse } from "@/interfaces/IBaseResponse";
 import { IBasicModal } from "@/interfaces/IBasicModal";
 import { IFamily } from "@/interfaces/IFamily";
@@ -13,9 +12,9 @@ import { Button, Field, Fieldset, HStack, Input, InputGroup } from "@chakra-ui/r
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { FiHash, FiUser } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import z from "zod";
 
 interface IModalFamilyProps extends IBasicModal {
@@ -27,22 +26,13 @@ type FamilyFormValues = z.infer<typeof familySchema>;
 const ModalFamily: FC<IModalFamilyProps> = ({ isOpen, onClose, selected }) => {
     const { reFetch } = useAuth()
     const queryClient = useQueryClient()
-    const { register, handleSubmit, watch, setValue, reset, formState: { errors, isValid, isDirty, dirtyFields } } = useForm<FamilyFormValues>({
+    const { register, handleSubmit, reset, formState: { errors, isValid, isDirty } } = useForm<FamilyFormValues>({
         resolver: zodResolver(familySchema),
         defaultValues: {
             name: selected?.name || "",
-            slug: selected?.slug || "",
         },
         mode: "all",
     });
-
-    const watchName = watch("name");
-
-    useEffect(() => {
-        if (!dirtyFields.slug) {
-            setValue("slug", generateSlug(watchName));
-        }
-    }, [watchName, dirtyFields.slug, setValue]);
 
     const { mutate: joinFamilyMutation, isPending: loadingJoinFamily } = useMutation({
         mutationFn: (family_id: string) => joinFamilyFromAPI({ family_id }),
@@ -85,6 +75,10 @@ const ModalFamily: FC<IModalFamilyProps> = ({ isOpen, onClose, selected }) => {
                     type: "success",
                     closable: true,
                 })
+                onClose()
+                reset()
+                reFetch()
+                queryClient.refetchQueries({ queryKey: ['family-detail'] })
             }
         },
         onError: (error: AxiosError<IBaseResponse<unknown>>) => {
@@ -129,14 +123,6 @@ const ModalFamily: FC<IModalFamilyProps> = ({ isOpen, onClose, selected }) => {
                                 <Input {...register("name")} rounded='xl' size='xl' name="name" type="text" placeholder='Masukan nama lengkap kamu' _placeholder={{ fontSize: 'sm' }} />
                             </InputGroup>
                             <Field.ErrorText>{errors.name?.message}</Field.ErrorText>
-                        </Field.Root>
-
-                        <Field.Root invalid={!!errors.slug}>
-                            <Field.Label>Kode Keluarga</Field.Label>
-                            <InputGroup startElement={<FiHash />}>
-                                <Input {...register("slug")} rounded='xl' size='xl' name="slug" type="text" placeholder='Kode keluarga akan otomatis terisi' _placeholder={{ fontSize: 'sm' }} />
-                            </InputGroup>
-                            <Field.ErrorText>{errors.slug?.message}</Field.ErrorText>
                         </Field.Root>
                     </Fieldset.Content>
                 </Fieldset.Root>

@@ -1,11 +1,11 @@
 import { ProtectedLayout } from '@/components/layouts/ProtectedLayout';
-import Transactions from '@/containers/Transactions';
+import Categories from '@/containers/Categories';
 import type { NextPage, NextPageContext } from 'next';
 
-const TransactionsPage: NextPage = () => {
+const CategoriesPage: NextPage = () => {
   return (
     <ProtectedLayout>
-      <Transactions />
+      <Categories />
     </ProtectedLayout>
   )
 }
@@ -13,9 +13,9 @@ const TransactionsPage: NextPage = () => {
 export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {
-      title: 'Laporan Transaksi',
+      title: 'Kategori Transaksi',
     },
   };
 }
-export default TransactionsPage
+export default CategoriesPage
 

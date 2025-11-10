@@ -1,11 +1,9 @@
 export interface IParamCreateFamily {
     name: string;
-    slug: string;
 }
 
 export interface IParamUpdateFamily {
     name: string;
-    slug: string;
 }
 
 export interface IParamGetFamilyDetail {

@@ -34,9 +34,8 @@ export const updateFamilyFromAPI = (params: IParamUpdateFamily & { id: string })
     const options: IPayloadAPI = {
         method: 'PUT',
         servicePath: 'families',
-        uri: 'update',
+        uri: `update?id=${id}`,
         params: {
-            id,
             ...bodyParams,
         },
     };
@@ -49,6 +48,15 @@ export const deleteFamilyFromAPI = (params: IParamDeleteFamily) => {
         servicePath: 'families',
         uri: 'delete',
         params,
+    };
+    return callAPIContent(options);
+};
+
+export const generateInviteLinkFromAPI = () => {
+    const options: IPayloadAPI = {
+        method: 'POST',
+        servicePath: 'families',
+        uri: 'generate-invite',
     };
     return callAPIContent(options);
 };

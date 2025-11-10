@@ -5,7 +5,6 @@ export const createCategorySchema = z.object({
   type: z.enum(["income", "expense"], {
     message: "Type harus income atau expense"
   }),
-  slug: z.string().min(1, "Slug harus diisi").max(100, "Slug maksimal 100 karakter").regex(/^[a-z0-9-]+$/, "Slug hanya boleh huruf kecil, angka, dan tanda hubung"),
 });
 
 export const updateCategorySchema = z.object({
@@ -13,6 +12,5 @@ export const updateCategorySchema = z.object({
   type: z.enum(["income", "expense"], {
     message: "Type harus income atau expense"
   }).optional(),
-  slug: z.string().min(1, "Slug harus diisi").max(100, "Slug maksimal 100 karakter").regex(/^[a-z0-9-]+$/, "Slug hanya boleh huruf kecil, angka, dan tanda hubung").optional(),
 });
 

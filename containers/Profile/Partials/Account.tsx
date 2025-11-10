@@ -1,7 +1,6 @@
 import { useAuth } from '@/providers/useAuth';
-import { Avatar, Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Text, VStack } from '@chakra-ui/react';
 import { JSX, memo } from 'react';
-import { BsGearFill } from 'react-icons/bs';
 import { FiMail, FiPhone } from 'react-icons/fi';
 
 const Account: React.FC = (): JSX.Element => {
@@ -32,9 +31,6 @@ const Account: React.FC = (): JSX.Element => {
                         </VStack>
                     </Box>
                 </HStack>
-                <IconButton rounded='full' colorPalette="orange" variant="surface" size='xs'>
-                    <BsGearFill />
-                </IconButton>
             </HStack>
         </Box>
     )

@@ -45,19 +45,7 @@ export default async function handler(
         // Query untuk data
         let dataQuery = supabase
             .from("transactions")
-            .select(`
-                *,
-                categories:category_id (
-                    id,
-                    name,
-                    slug,
-                    type,
-                ),
-                users:user_id (
-                    id,
-                    name,
-                ),
-            `)
+            .select("*, categories:category_id(id,name,slug,type), users:user_id(id,name)")
             .order("transaction_date", { ascending: false })
             .order("created_at", { ascending: false })
             .range(offset, offset + limitNum - 1);
@@ -119,6 +107,7 @@ export default async function handler(
             },
             transaction_date: transaction.transaction_date,
             transaction_no: transaction.transaction_no,
+            note: transaction.note,
             created_at: transaction.created_at,
             updated_at: transaction.updated_at,
         }));
